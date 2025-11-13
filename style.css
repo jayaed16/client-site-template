@@ -220,3 +220,46 @@ body {
   font-size: 13px;
   color: #6b7280;
 }
+.section {
+  padding: 40px 0;
+  background: #ffffff;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section-alt {
+  background: #f3f4f6;
+}
+
+.section-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.section-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.section-body {
+  margin: 0;
+  font-size: 15px;
+  color: var(--text-muted);
+  max-width: 560px;
+}
+
+.contact-inner {
+  align-items: center;
+}
+
+.contact-cta {
+  max-width: 260px;
+}
+
+.contact-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
