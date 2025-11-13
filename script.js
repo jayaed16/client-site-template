@@ -1,15 +1,15 @@
-// script.js (CLIENT SITE, multi-page)
+// script.js (CLIENT TEST SITE, now draft/published-aware)
 import { db } from "./firebase.js";
 import {
   doc,
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-console.log("client-site script.js loaded");
+console.log("client-site script.js loaded (draft/published)");
 
 const CURRENT_SITE_ID = "test-site-1";
 
-// Common footer year
+// Common footer year (Test Site uses footer-year)
 const footerYearEl = document.getElementById("footer-year");
 if (footerYearEl) {
   footerYearEl.textContent = new Date().getFullYear().toString();
@@ -32,13 +32,38 @@ function siteDocRef(siteId) {
   return doc(db, "sites", siteId);
 }
 
+/**
+ * Decide which branch to use:
+ * - ?mode=draft  → use data.draft.*
+ * - otherwise    → use data.published.*
+ */
+function getContentBranch() {
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get("mode");
+  return mode === "draft" ? "draft" : "published";
+}
+
+/**
+ * Given the raw Firestore doc data, pick the right root object:
+ * - Prefer data[branch] (draft or published)
+ * - Fallback to data itself for backward compatibility
+ */
+function getContentRoot(data) {
+  const branch = getContentBranch();
+  if (data && typeof data === "object") {
+    if (data[branch] && typeof data[branch] === "object") {
+      return data[branch];
+    }
+    // Backwards-compat: if we don't have draft/published yet,
+    // just treat the top level as the root.
+    return data;
+  }
+  return {};
+}
+
 async function loadContent() {
   // If the page has none of the editable areas, skip Firestore
-  if (
-    !heroHeadlineEl &&
-    !aboutHeadingEl &&
-    !contactHeadingEl
-  ) {
+  if (!heroHeadlineEl && !aboutHeadingEl && !contactHeadingEl) {
     return;
   }
 
@@ -56,10 +81,11 @@ async function loadContent() {
     }
 
     const data = snap.data();
+    const root = getContentRoot(data);
 
     // HERO (Home page)
     if (heroHeadlineEl || heroSubtextEl || heroButtonEl) {
-      const hero = data.hero || {};
+      const hero = root.hero || {};
       const headline = (hero.headline || "").trim();
       const subtext = (hero.subtext || "").trim();
       const buttonText = (hero.buttonText || "").trim();
@@ -71,7 +97,7 @@ async function loadContent() {
 
     // ABOUT page
     if (aboutHeadingEl || aboutBodyEl) {
-      const about = data.about || {};
+      const about = root.about || {};
       const ah = (about.heading || "").trim();
       const ab = (about.body || "").trim();
 
@@ -81,7 +107,7 @@ async function loadContent() {
 
     // CONTACT page
     if (contactHeadingEl || contactBodyEl || contactButtonEl) {
-      const contact = data.contact || {};
+      const contact = root.contact || {};
       const ch = (contact.heading || "").trim();
       const cb = (contact.body || "").trim();
       const cbBtn = (contact.buttonText || "").trim();
