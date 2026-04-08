@@ -1,0 +1,57 @@
+---
+const {
+  heading = "Welcome to the Client Site Template",
+  subheading = "This hero section is powered by reusable data.",
+  backgroundImage = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+  textAlignment = "left",
+  height = "medium",
+
+  button1Text = "Learn More",
+  button1Link = "/about",
+
+  button2Text = "",
+  button2Link = "",
+
+  button3Text = "",
+  button3Link = ""
+} = Astro.props;
+
+const contentAlignClass = textAlignment === "center" ? "hero--center" : "hero--left";
+const heightClass =
+  height === "full" ? "hero--full" :
+  height === "small" ? "hero--small" :
+  "hero--medium";
+---
+
+<section
+  class={`hero ${contentAlignClass} ${heightClass}`}
+  style={`background-image: linear-gradient(rgba(0,0,0,.45), rgba(0,0,0,.45)), url('${backgroundImage}');`}
+>
+  <div class="container hero-content">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Reusable Website Template</p>
+      <h1>{heading}</h1>
+      <p class="hero-subheading">{subheading}</p>
+
+      <div class="hero-actions">
+        {button1Text && (
+          <a href={button1Link} class="btn btn-primary">
+            {button1Text}
+          </a>
+        )}
+
+        {button2Text && (
+          <a href={button2Link} class="btn btn-secondary">
+            {button2Text}
+          </a>
+        )}
+
+        {button3Text && (
+          <a href={button3Link} class="btn btn-secondary">
+            {button3Text}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

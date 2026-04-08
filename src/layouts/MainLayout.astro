@@ -2,8 +2,66 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { theme } from "../config/theme.js";
 
 const { title = "Client Site Template" } = Astro.props;
+
+const themeVars = `
+  :root {
+    --max-width: ${theme.layout.maxWidth};
+    --page-padding: ${theme.layout.pagePadding};
+    --section-padding: ${theme.layout.sectionPadding};
+    --header-height: ${theme.layout.headerHeight};
+
+    --color-bg: ${theme.colors.background};
+    --color-text: ${theme.colors.text};
+    --color-primary: ${theme.colors.primary};
+    --color-accent: ${theme.colors.accent};
+    --color-surface-light: ${theme.colors.surfaceLight};
+    --color-surface-dark: ${theme.colors.surfaceDark};
+    --color-border-light: ${theme.colors.borderLight};
+    --color-white: ${theme.colors.white};
+    --color-white-soft-border: ${theme.colors.whiteSoftBorder};
+    --color-primary: ${theme.colors.primary};
+    --color-accent: ${theme.colors.accent};
+    --color-surface-light: ${theme.colors.surfaceLight};
+    --color-surface-dark: ${theme.colors.surfaceDark};
+    --color-surface-soft: ${theme.colors.surfaceSoft};
+
+    --font-body: ${theme.fonts.body};
+    --font-heading: ${theme.fonts.heading};
+
+    --font-size-base: ${theme.fontSizes.base};
+    --font-size-logo: ${theme.fontSizes.logo};
+    --font-size-nav: ${theme.fontSizes.nav};
+    --font-size-eyebrow: ${theme.fontSizes.eyebrow};
+    --font-size-body: ${theme.fontSizes.body};
+    --font-size-hero-subheading: ${theme.fontSizes.heroSubheading};
+    --font-size-hero-title: ${theme.fontSizes.heroTitle};
+    --font-size-section-title: ${theme.fontSizes.sectionTitle};
+
+    --header-gap: ${theme.spacing.headerGap};
+    --nav-gap: ${theme.spacing.navGap};
+    --button-gap: ${theme.spacing.buttonGap};
+    --grid-gap: ${theme.spacing.gridGap};
+    --grid-gap-mobile: ${theme.spacing.gridGapMobile};
+    --footer-padding: ${theme.spacing.footerPadding};
+    --hero-text-max-width: ${theme.spacing.heroTextMaxWidth};
+    --hero-subheading-max-width: ${theme.spacing.heroSubheadingMaxWidth};
+    --hero-text-left-padding: ${theme.spacing.heroTextLeftPadding};
+
+    --button-min-height: ${theme.sizing.buttonMinHeight};
+    --hero-small-height: ${theme.sizing.heroSmall};
+    --hero-medium-height: ${theme.sizing.heroMedium};
+    --text-image-min-height: ${theme.sizing.textImageMinHeight};
+    --text-image-min-height-mobile: ${theme.sizing.textImageMinHeightMobile};
+
+    --radius-pill: ${theme.radius.pill};
+    --radius-image: ${theme.radius.image};
+
+    --transition-button: ${theme.effects.buttonTransition};
+  }
+`;
 ---
 
 <!DOCTYPE html>
@@ -12,6 +70,7 @@ const { title = "Client Site Template" } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <style is:inline set:html={themeVars}></style>
   </head>
   <body>
     <Header />

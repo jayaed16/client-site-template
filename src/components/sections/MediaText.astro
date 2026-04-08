@@ -1,0 +1,130 @@
+---
+const {
+  composition = "main-supporting",
+  layout = "one-support-corner",
+
+  content = {},
+  section = {},
+  media = {},
+  styling = {}
+} = Astro.props;
+
+const {
+  eyebrow = "",
+  heading = "About Our Business",
+  subheading = "",
+  bodyText = "",
+  buttons = []
+} = content;
+
+const {
+  size = "medium",
+  imagePosition = "right",
+  backgroundStyle = "none",
+  textAlign = "left",
+  verticalAlign = "center",
+  contentWidth = "normal"
+} = section;
+
+const {
+  photos = [],
+  radiusStyle = "soft"
+} = media;
+
+const mainPhoto = photos.find((photo) => photo.role === "main") || photos[0];
+const supportPhotos = photos.filter((photo) => photo.role !== "main");
+
+const {
+  centerFrame = {},
+  offsetFrame = {},
+  detail = {}
+} = styling;
+
+const sectionClasses = [
+  "media-text",
+  `media-text--composition-${composition}`,
+  `media-text--layout-${layout}`,
+  `media-text--image-${imagePosition}`,
+  `media-text--size-${size}`,
+  `media-text--text-${textAlign}`,
+  `media-text--align-${verticalAlign}`,
+  `media-text--bg-${backgroundStyle}`,
+  `media-text--content-${contentWidth}`,
+  `media-text--radius-${radiusStyle}`,
+  centerFrame.show ? "media-text--has-center-frame" : "",
+  offsetFrame.show ? "media-text--has-offset-frame" : "",
+  detail.show ? "media-text--has-detail" : ""
+].filter(Boolean).join(" ");
+
+const inlineStyles = `
+  --media-text-center-frame-color: var(--color-${centerFrame.colorToken || "accent"});
+  --media-text-offset-frame-color: var(--color-${offsetFrame.colorToken || "primary"});
+  --media-text-detail-color: var(--color-${detail.colorToken || "surface-light"});
+`;
+---
+
+<section class={`section ${sectionClasses}`} style={inlineStyles}>
+  <div class="container">
+    <div class="media-text-grid">
+      <div class="media-text-copy">
+        {eyebrow && <p class="media-text-eyebrow">{eyebrow}</p>}
+        <h2>{heading}</h2>
+        {subheading && <p class="media-text-subheading">{subheading}</p>}
+        {bodyText && <p class="media-text-body">{bodyText}</p>}
+
+        {buttons.length > 0 && (
+          <div class="media-text-actions">
+            {buttons.map((button) => (
+              <a
+                href={button.link}
+                class={`btn ${button.style === "secondary" ? "btn-secondary" : "btn-primary"}`}
+              >
+                {button.text}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div class="media-text-media">
+        {composition === "main-supporting" && mainPhoto && (
+          <div class="media-text-main-supporting">
+            <div class="media-text-main-wrap">
+              <img
+                src={mainPhoto.src}
+                alt={mainPhoto.alt || heading}
+                class="media-text-main-image"
+              />
+            </div>
+
+            {supportPhotos.map((photo, index) => (
+              <div class={`media-text-support media-text-support--${index + 1}`}>
+                <img src={photo.src} alt={photo.alt || `${heading} detail`} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {composition === "full-media" && photos.length > 0 && (
+          <div class="media-text-full-media">
+            {photos.map((photo, index) => (
+              <div class={`media-text-full-item media-text-full-item--${index + 1}`}>
+                <img src={photo.src} alt={photo.alt || `${heading} image ${index + 1}`} />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {composition === "photo-cards" && photos.length > 0 && (
+          <div class="media-text-photo-cards">
+            {photos.map((photo, index) => (
+              <article class={`media-text-card media-text-card--${index + 1}`}>
+                <img src={photo.src} alt={photo.alt || `${heading} card ${index + 1}`} />
+              </article>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

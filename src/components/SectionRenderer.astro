@@ -1,0 +1,21 @@
+---
+import Hero from "./sections/Hero.astro";
+import MediaText from "./sections/MediaText.astro";
+
+const { sections = [] } = Astro.props;
+---
+
+{sections.map((section) => {
+  if (!section.enabled) return null;
+
+  switch (section.type) {
+    case "hero":
+      return <Hero {...section.data} />;
+
+    case "media_text":
+      return <MediaText {...section.data} />;
+
+    default:
+      return null;
+  }
+})}

@@ -1,12 +1,9 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import SectionRenderer from "../components/SectionRenderer.astro";
+import { homeSections } from "../data/pages.js";
 ---
 
 <MainLayout title="Client Site Template">
-  <section class="section">
-    <div class="container">
-      <h1>Client Site Template</h1>
-      <p>The reusable starter site is working.</p>
-    </div>
-  </section>
+  <SectionRenderer sections={homeSections} />
 </MainLayout>
